@@ -5,6 +5,7 @@ import { WORDS } from '../../data';
 import Guesses from '../Guesses/Guesses';
 import Banner from '../Banner/Banner';
 import GuessInput from '../GuessInput/GuessInput';
+import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -12,20 +13,16 @@ const answer = sample(WORDS);
 console.info({ answer });
 
 function Game() {
-  const [guess, setGuess] = React.useState('');
   const [guesses, setGuesses] = React.useState([]);
   const [incorrectGuesses, setIncorrectGuesses] = React.useState(0);
   const [hasWon, setHasWon] = React.useState(false);
 
-  const processGuess = (event) => {
-    
-    event.preventDefault();
-    
+  const processGuess = (guess) => {
+
     let futureGuesses = [...guesses];
     futureGuesses.push(guess);
     
     setGuesses(futureGuesses);
-    setGuess('');
 
     if ( guess !== answer)
       setIncorrectGuesses(incorrectGuesses + 1);
@@ -35,11 +32,11 @@ function Game() {
 
   return <>
     <Guesses guesses={ guesses } answer={ answer } />
-    <GuessInput disabled={ hasWon || guesses.length > 5 } guess={guess} setGuess={ setGuess } processGuess={ processGuess }  />
-    { hasWon || guesses.length > 5 ?
+    <GuessInput disabled={ hasWon || guesses.length >= NUM_OF_GUESSES_ALLOWED } processGuess={ processGuess }  />
+    { hasWon || guesses.length >= NUM_OF_GUESSES_ALLOWED ?
       <Banner type={ hasWon ? 'happy' : 'sad' }>
         { hasWon ?
-          ( <p><strong>Congratulations!</strong> Got it in <strong>{ (incorrectGuesses + 1) } guesses</strong></p> ) :
+          ( <p><strong>Congratulations!</strong> Got it in <strong>{ incorrectGuesses <= 0 ? '1 guess' : ( (incorrectGuesses + 1) + ' guesses' ) }</strong></p> ) :
           ( <p>Sorry, the correct answer is <strong>{ answer }</strong></p> )
         }
       </Banner>
