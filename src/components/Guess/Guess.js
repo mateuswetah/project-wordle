@@ -3,12 +3,14 @@ import React from 'react';
 import { range } from '../../utils';
 import { checkGuess } from '../../game-helpers';
 
-function Guess({ guess }) {
-  const guessAsArray = guess.split('');
+function Guess({ guess, answer }) {
+  const checkGuessArray = checkGuess(guess, answer);
 
   return <p className="guess">
     {
-      range(5).map((index) => <span key={ index } className="cell">{ guessAsArray[index] ? guessAsArray[index] : '' }</span>)
+      range(5).map((index) => <span key={ index } className={ 'cell ' + (checkGuessArray ? checkGuessArray[index].status : '') }>
+        { checkGuessArray ? checkGuessArray[index].letter : '' }
+      </span>)
     }
   </p>;
 }
