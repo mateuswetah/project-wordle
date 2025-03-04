@@ -1,6 +1,6 @@
 import React from 'react';
 
-function GuessInput({ guess, setGuess, processGuess }) {
+function GuessInput({ guess, setGuess, processGuess, disabled }) {
 
   return <form 
     className="guess-input-wrapper" 
@@ -9,6 +9,7 @@ function GuessInput({ guess, setGuess, processGuess }) {
     <input 
       id="guess-input" 
       type="text"
+      disabled={ disabled }
       value={ guess } 
       onChange={ (event) => setGuess(event.target.value.toUpperCase()) }
       minLength={ 5 }
